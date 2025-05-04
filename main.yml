@@ -1,54 +1,34 @@
 name: kingbri's YAML plugins
 author: kingbri
 sources:
-  - name: AnimeTosho
-    version: 6
-    minVersion: '0.6.4'
+name: Public domain plugins
+author: kingbri
+sources:
+  - name: DODI Repacks
+    version: 2
+    minVersion: '0.7'
     about: >-
-      An aggregator of public trackers for Japanese media.
-    website: https://animetosho.org
+      Scrapes DODI Repacks titles and links to file hosts.
+    website: https://dodi-repacks.site
     tags:
-      - name: Reliable
-        color: 34c759
-      - name: Anime
-    rssParser:
-      rssUrl: https://feed.animetosho.org
-      searchUrl: /api?q={query}
-      items: item
-      magnetHash:
-        query: infohash
-        discriminator: name
-        attribute: value
-      magnetLink:
-        query: magnetUrl
-        discriminator: name
-        attribute: value
-      title:
-        query: title
-      size:
-        query: size
-        discriminator: name
-        attribute: value
-      sl:
-        seeders: seeders
-        leechers: leechers
-        discriminator: name
-        attribute: value
+      - name: Games
+        color: ff9500
+      - name: Repacks
+        color: 5856d6
     htmlParser:
-      searchUrl: /search?q={query}
-      rows: '#content .home_list_entry'
-      magnet:
-        query: .links > a:nth-child(4)
-        attribute: href
+      searchUrl: /page/{page}/
+      rows: article
       title:
-        query: .link
+        query: h2.entry-title a
+      magnet:
+        query: div.entry-content a[href*="up-4ever.net"], div.entry-content a[href*="upload-4ever.com"], div.entry-content a[href*="file-upload.com"]
+        attribute: href
       size:
-        query: .size
+        query: div.entry-content
+        regex: 'Size:\s*([^\n\r<]+)'
       sl:
-        combined: .links > span:nth-child(5)
-        attribute: title
-        seederRegex: Seeders:\s?(\d+)
-        leecherRegex: Leechers:\s?(\d+)
+        seeders: ''
+        leechers: ''
   - name: Nyaa
     version: 6
     minVersion: "0.6.4"
