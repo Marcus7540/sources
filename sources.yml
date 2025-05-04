@@ -1,0 +1,301 @@
+name: kingbri's YAML plugins
+author: kingbri
+sources:
+  - name: AnimeTosho
+    version: 6
+    minVersion: '0.6.4'
+    about: >-
+      An aggregator of public trackers for Japanese media.
+    website: https://animetosho.org
+    tags:
+      - name: Reliable
+        color: 34c759
+      - name: Anime
+    rssParser:
+      rssUrl: https://feed.animetosho.org
+      searchUrl: /api?q={query}
+      items: item
+      magnetHash:
+        query: infohash
+        discriminator: name
+        attribute: value
+      magnetLink:
+        query: magnetUrl
+        discriminator: name
+        attribute: value
+      title:
+        query: title
+      size:
+        query: size
+        discriminator: name
+        attribute: value
+      sl:
+        seeders: seeders
+        leechers: leechers
+        discriminator: name
+        attribute: value
+    htmlParser:
+      searchUrl: /search?q={query}
+      rows: '#content .home_list_entry'
+      magnet:
+        query: .links > a:nth-child(4)
+        attribute: href
+      title:
+        query: .link
+      size:
+        query: .size
+      sl:
+        combined: .links > span:nth-child(5)
+        attribute: title
+        seederRegex: Seeders:\s?(\d+)
+        leecherRegex: Leechers:\s?(\d+)
+  - name: Nyaa
+    version: 6
+    minVersion: "0.6.4"
+    about: >-
+      The one stop shop for your anime and Japanese media needs.
+    website: "https://nyaa.si"
+    tags:
+      - name: Reliable
+        color: 34c759
+      - name: Anime
+    trackers:
+      - http://nyaa.tracker.wf:7777/announce
+      - udp://open.stealth.si:80/announce
+      - udp://tracker.opentrackr.org:1337/announce
+      - udp://exodus.desync.com:6969/announce
+      - udp://tracker.torrent.eu.org:451/announce
+    rssParser:
+      searchUrl: /?page=rss&q={query}
+      items: item
+      magnetHash:
+        query: nyaa:infoHash
+      title:
+        query: title
+      size:
+        query: nyaa:size
+      sl:
+        seeders: nyaa:seeders
+        leechers: nyaa:leechers
+    htmlParser:
+      searchUrl: ?q={query}
+      rows: .torrent-list tbody tr
+      magnet:
+        query: td:nth-child(3) > a:nth-child(2)
+        attribute: href
+      title:
+        query: td:nth-child(2) > a:nth-last-child(1)
+      size:
+        query: td:nth-child(4)
+      sl:
+        seeders: td:nth-child(6)
+        leechers: td:nth-child(7)
+  - name: Kickass
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      An ancient media provider. Very reliable to use.
+    website: https://kick4ss.com
+    tags:
+      - name: Reliable
+        color: 34c759
+      - name: Movies
+      - name: TV
+      - name: Anime
+    fallbackUrls:
+      - https://kickass-kat.com
+      - https://kickass.vc
+      - https://kat.how
+      - https://kat.li
+      - https://kickass.cm
+      - https://kickass2.st
+      - https://kat.sx
+      - https://thekat.info
+    htmlParser:
+      searchUrl: /usearch/{query}/?field=seeders&sorder=desc
+      rows: .data tbody tr:not(.firstr)
+      magnet:
+        # May not work because magnet is URLEncoded
+        query: td:nth-child(1) div:nth-child(1) a:nth-last-child(2)
+        attribute: href
+        regex: (magnet.*)
+      title:
+        query: td:nth-child(1) .torrentname .torType a
+      size:
+        query: .nobr
+      sl:
+        seeders: .red
+        leechers: .green
+  - name: Torrentz2
+    version: 3
+    minVersion: '0.6.4'
+    about: >-
+      Scraper and indexer of various sites. Extremely reliable to use.
+    website: https://torrentz2.nz
+    tags:
+      - name: Reliable
+        color: 34c759
+      - name: Movies
+      - name: TV
+      - name: Anime
+    htmlParser:
+      searchUrl: /search?q={query}
+      rows: '#wrap dl'
+      magnet:
+        query: dd > span:nth-child(1) > a
+        attribute: href
+      title:
+        query: dt > a
+      size:
+        query: dd > span:nth-child(3)
+      sl:
+        seeders: dd > span:nth-child(4)
+        leechers: dd > span:nth-child(5)
+  - name: YTS
+    version: 3
+    minVersion: '0.6.4'
+    about: >-
+      Has pretty much every movie out there. Searching can be finnicky, so use the full term.
+    website: https://yts.mx
+    tags:
+      - name: Reliable
+        color: 34c759
+      - name: Movies
+    trackers:
+      - udp://tracker.opentrackr.org:1337/announce
+      - udp://tracker.leechers-paradise.org:6969/announce
+      - udp://9.rarbg.to:2710/announce
+      - udp://p4p.arenabg.ch:1337/announce
+      - udp://tracker.cyberia.is:6969/announce
+      - http://p4p.arenabg.com:1337/announce
+      - udp://tracker.internetwarriors.net:1337/announce
+    jsonParser:
+      searchUrl: /api/v2/list_movies.json?query_term={query}
+      results: data.movies
+      subResults: torrents
+      magnetHash:
+        query: hash
+      title:
+        query: title_long
+        discriminator: quality
+      size:
+        query: size
+      sl:
+        seeders: seeds
+        leechers: peers
+  - name: 1337x
+    version: 3
+    about: >-
+      Large aggregate site for media. Make your queries descriptive because searches are slow.
+    website: https://1337x.to
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: Movies
+      - name: TV
+      - name: Anime
+    htmlParser:
+      searchUrl: /search/{query}/1/
+      rows: .table-list tbody tr
+      magnet:
+        externalLinkQuery: .name a:nth-last-child(1)
+        query: div.clearfix > ul:nth-child(1) > li:nth-child(1) > a
+        attribute: href
+      title:
+        query: .name > a:nth-last-child(1)
+      size:
+        query: .size
+        regex: (.+?B)
+      sl:
+        seeders: .seeds
+        leechers: .leeches
+  - name: PirateBay
+    version: 4
+    minVersion: '0.6.4'
+    about: >-
+      The legendary media aggregate site. Nowadays, it's pretty unreliable.
+    website: https://thepiratebay.org
+    tags:
+      - name: Unreliable
+        color: ff3b30
+      - name: Movies
+      - name: TV
+      - name: Anime
+    fallbackUrls:
+      - https://thepiratebay0.org/
+      - https://thepiratebay10.org/
+    trackers:
+      - udp://tracker.coppersurfer.tk:6969/announce
+      - udp://tracker.openbittorrent.com:6969/announce
+      - udp://9.rarbg.to:2710/announce
+      - udp://9.rarbg.me:2780/announce
+      - udp://9.rarbg.to:2730/announce
+      - udp://tracker.opentrackr.org:1337
+      - http://p4p.arenabg.com:1337/announce
+      - udp://tracker.torrent.eu.org:451/announce
+      - udp://tracker.tiny-vps.com:6969/announce
+      - udp://open.stealth.si:80/announce
+    api:
+      apiUrl: https://apibay.org
+    jsonParser:
+      searchUrl: /q.php?q={query}
+      magnetHash:
+        query: info_hash
+      title:
+        query: name
+      size:
+        query: size
+      sl:
+        seeders: seeders
+        leechers: leechers
+    htmlParser:
+      searchUrl: /search/{query}
+      rows: table#searchResult tbody > tr
+      magnet:
+        query: td:nth-child(2) > a
+        attribute: href
+      title:
+        query: td:nth-child(2) .detName .detLink
+      size:
+        query: td:nth-child(2) .detDesc
+        regex: (Size.+?B)
+      sl:
+        seeders: td:nth-child(3)
+        leechers: td:nth-child(4)
+  - name: RARBG
+    version: 3
+    minVersion: '0.6.4'
+    about: >-
+      A solid and long-time favorite for media torrenting.
+    website: https://rarbg.to
+    tags:
+      - name: Reliable
+        color: 34c759
+      - name: Movies
+      - name: TV
+      - name: Anime
+    jsonParser:
+      searchUrl: /api/v2/search?q={query}
+      results: data.results
+      magnetHash:
+        query: hash
+      title:
+        query: title
+      size:
+        query: size
+      sl:
+        seeders: seeders
+        leechers: leechers
+    htmlParser:
+      searchUrl: /torrents.php?search={query}
+      rows: .lista .torrentname
+      magnet:
+        query: .torrentname > a:nth-child(1)
+        attribute: href
+      title:
+        query: .torrentname
+      size:
+        query: .lista .nobr
+      sl:
+        seeders: .seed
+        leechers: .leech
