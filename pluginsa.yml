@@ -5,13 +5,11 @@ sources:
     version: 3
     about: >-
       Large aggregate site for media. Make your queries descriptive because searches are slow.
-    website: https://1337x.to
+    website: https://dodi-repacks.site/
     tags:
-      - name: Slow
+      - name: Fast
         color: ff9500
-      - name: Movies
-      - name: TV
-      - name: Anime
+      - name: Games
     htmlParser:
       searchUrl: /search/{query}/1/
       rows: .table-list tbody tr
