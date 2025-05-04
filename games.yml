@@ -1,0 +1,338 @@
+name: kingbri's YAML plugins
+author: kingbri
+sources:
+  - name: 1337x
+    version: 3
+    about: >-
+      Large aggregate site for media. Make your queries descriptive because searches are slow.
+    website: https://dodi-repacks.site/
+    tags:
+      - name: Fast
+        color: ff9500
+      - name: Games
+    htmlParser:
+      searchUrl: /search/{query}/1/
+      rows: .table-list tbody tr
+      magnet:
+        externalLinkQuery: .name a:nth-last-child(1)
+        query: div.clearfix > ul:nth-child(1) > li:nth-child(1) > a
+        attribute: href
+      title:
+        query: .name > a:nth-last-child(1)
+      size:
+        query: .size
+        regex: (.+?B)
+      sl:
+        seeders: .seeds
+        leechers: .leeches
+  - name: Sukebei
+    version: 1
+    minVersion: '0.7'
+    about: >-
+      The adult version of Nyaa. Not for the faint of heart.
+    website: "https://sukebei.nyaa.si"
+    tags:
+      - name: Adult
+        color: ff2d55
+    trackers:
+      - http://nyaa.tracker.wf:7777/announce
+      - udp://open.stealth.si:80/announce
+      - udp://tracker.opentrackr.org:1337/announce
+      - udp://exodus.desync.com:6969/announce
+      - udp://tracker.torrent.eu.org:451/announce
+    rssParser:
+      searchUrl: /?page=rss&q={query}
+      items: item
+      magnetHash:
+        query: nyaa:infoHash
+      title:
+        query: title
+      size:
+        query: nyaa:size
+      sl:
+        seeders: nyaa:seeders
+        leechers: nyaa:leechers
+    htmlParser:
+      searchUrl: ?q={query}
+      rows: .torrent-list tbody tr
+      magnet:
+        query: td:nth-child(3) > a:nth-child(2)
+        attribute: href
+      title:
+        query: td:nth-child(2) > a:nth-last-child(1)
+      size:
+        query: td:nth-child(4)
+      sl:
+        seeders: td:nth-child(6)
+        leechers: td:nth-child(7)
+  - name: TorrentDownload
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for media.
+    website: https://www.torrentdownload.info
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: Movies
+      - name: TV
+    htmlParser:
+      searchUrl: /search?q={query}
+      rows: table:nth-of-type(2) tbody tr:not(:first-child)
+      magnet:
+        externalLinkQuery: .tt-name a
+        query: .table2 tr:nth-child(5) a
+        attribute: href
+      title:
+        query: .tt-name a
+      size:
+        query: .tdnormal:nth-of-type(3)
+      sl:
+        seeders: .tdseed
+        seederRegex: (\d+)
+        leechers: .tdleech
+        leecherRegex: (\d+)
+  - name: AniRena
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Website tracking a wide variety of Japanese media.
+    website: https://www.anirena.com
+    tags:
+      - name: Anime
+    htmlParser:
+      searchUrl: /?s={query}
+      rows: .full2:has(table)
+      magnet:
+        query: table tbody tr .torrents_small_info_data2 a:nth-child(2)
+        attribute: href
+      title:
+        query: table tbody tr .torrents_small_info_data1
+      size:
+        query: table tbody tr .torrents_small_size_data1
+      sl:
+        seeders: table tbody tr .torrents_small_seeders_data1
+        leechers: table tbody tr .torrents_small_leechers_data1
+  - name: TorrentDownloads
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for media. May be a sister site of TorrentDownload.
+    website: https://www.torrentdownloads.pro
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: Movies
+      - name: TV
+    htmlParser:
+      searchUrl: /search/?search={query}
+      rows: div:nth-child(6) .right_shadow .top_left_curve .top_right_curve .bottom_right_curve .bottom_left_curve .inner_container div:has(a.cloud)
+      magnet:
+        externalLinkQuery: p a
+        query: div:nth-child(3) .right_shadow .top_left_curve .top_right_curve .bottom_right_curve .bottom_left_curve .inner_container div:nth-child(14) p a
+        attribute: href
+      title:
+        query: p a
+        regex: ^\s*(.*?)\s*$
+      size:
+        query: span:nth-child(5)
+      sl:
+        seeders: span:nth-child(4)
+        leechers: span:nth-child(3)
+  - name: LimeTorrents
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for media.
+    website: https://www.limetorrents.lol
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: Movies
+      - name: TV
+    fallbackUrls:
+      - https://www.limetorrents.asia
+      - https://www.limetorrents.co
+      - https://www.limetor.com
+      - https://www.limetorrents.info
+    htmlParser:
+      searchUrl: /search/all/{query}/seeds/1/
+      rows: .table2 tbody tr:nth-child(n+2)
+      magnet:
+        externalLinkQuery: .tt-name a:nth-child(2)
+        query: div:nth-child(13) div a
+        attribute: href
+      title:
+        query: .tt-name
+      size:
+        query: .tdnormal:nth-child(3)
+      sl:
+        seeders: .tdleech
+        seederRegex: (\d+)
+        leechers: .tdseed
+        leecherRegex: (\d+)
+  - name: Torrent9
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for primarily French media.
+    website: https://torrent9.to
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: French
+        color: 32ade6
+      - name: Movies
+      - name: TV
+    htmlParser:
+      searchUrl: /search_torrent/{query}.html
+      rows: .table-responsive tbody tr
+      magnet:
+        externalLinkQuery: td:nth-child(1) a
+        query: .download-btn a
+        attribute: href
+      title:
+        query: td:nth-child(1) a
+      size:
+        query: td:nth-child(3)
+        regex: (\d+\.\d+)
+      sl:
+        seeders: td:nth-child(4) span
+        seederRegex: (\S+)
+        leechers: td:nth-child(5)
+        leecherRegex: (\S+)
+  - name: IlCorsaroNero
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for primarily Italian media.
+    website: http://ilcorsaronero.link
+    tags:
+      - name: Italian
+        color: 32ade6
+      - name: Movies
+      - name: TV
+    htmlParser:
+      searchUrl: /argh.php?search={query}
+      rows: tr.odd, tr.odd2
+      magnet:
+        externalLinkQuery: td:nth-child(2) .tab
+        query: .magnet
+        attribute: href
+      title:
+        query: td:nth-child(2) .tab
+      size:
+        query: td:nth-child(3)
+      sl:
+        seeders: td:nth-child(6)
+        leechers: td:nth-child(7)
+  - name: OxTorrent
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for media. Website is in French.
+    website: https://oxtorrent.gy
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: French
+        color: 32ade6
+      - name: Movies
+      - name: TV
+    htmlParser:
+      searchUrl: /recherche/{query}
+      rows: tbody > tr
+      magnet:
+        externalLinkQuery: a:nth-child(2)
+        query: .btn-download a:nth-child(1)
+        attribute: href
+      title:
+        query: a:nth-child(2)
+      size:
+        query: td:nth-child(2)
+      sl:
+        seeders: td:nth-child(3)
+        seederRegex: (\S+)
+        leechers: td:nth-child(4)
+        leecherRegex: (\S+)
+  - name: TorLock
+    version: 1
+    minVersion: '0.7.2'
+    about: >-
+      Aggregate site for media.
+    website: https://www.torlock.com
+    tags:
+      - name: Slow
+        color: ff9500
+      - name: Movies
+      - name: TV
+      - name: Anime
+    htmlParser:
+      searchUrl: /movie/torrents/{query}.html?
+      rows: .table-striped:nth-child(1) tbody tr
+      magnet:
+        externalLinkQuery: td:nth-child(1) a
+        query: .table-condensed thead tr th div:nth-child(2) h4 a
+        attribute: href
+      title:
+        query: td:nth-child(1) a
+      size:
+        query: .ts
+      sl:
+        seeders: .tul
+        leechers: .tdl
+actions:
+  - name: Open in Outplayer
+    version: 3
+    minVersion: '0.6.4'
+    about: |-
+      Uses libmpv as a backend.
+      Supports PIP with MKV files.
+      Not opensource.
+    website: https://apps.apple.com/us/app/outplayer/id1449923287
+    requires:
+      - debrid
+    deeplink:
+      - os: iOS
+        scheme: outplayer://{link}
+  - name: Open in VLC
+    version: 3
+    minVersion: '0.6.4'
+    about: |-
+      An opensource video player that runs pretty much anywhere and can play pretty much anything.
+    website: https://www.videolan.org/vlc/
+    requires:
+      - debrid
+    deeplink:
+      - os: iOS
+        scheme: vlc-x-callback://x-callback-url/stream?url=${link}
+      - scheme: vlc://${link}
+  - name: Open in Infuse
+    version: 3
+    minVersion: '0.6.4'
+    about: >-
+      Player full of support for various media servers, WebDAV, and multiple file formats.
+      Not opensource.
+    website: https://firecore.com/infuse
+    requires:
+      - debrid
+    deeplink:
+      - os: iOS
+        scheme: infuse://x-callback-url/play?url={link}
+  - name: Open in WebTor
+    version: 2
+    about: >-
+      Plays magnet links on the web. Can be slow.
+    website: https://webtor.io/#/
+    requires:
+      - magnet
+    deeplink: "https://webtor.io/#/show?magnet={link}"
+  - name: Open in iTorrent
+    version: 3
+    minVersion: '0.6.4'
+    website: https://github.com/XITRIX/iTorrent
+    requires:
+      - magnet
+    deeplink:
+      - os: iOS
+        scheme: "{link}"
